@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #cart {
+            margin-top: 20px;
+        }
+        #cart p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Shopping Cart</h1>
+
+    <button onclick="addToCart('Item 1', 10.00)">Add Item 1 ($10.00)</button>
+    <button onclick="addToCart('Item 2', 15.00)">Add Item 2 ($15.00)</button>
+    <button onclick="addToCart('Item 3', 20.00)">Add Item 3 ($20.00)</button>
+
+    <h2>Cart</h2>
+    <div id="cart"></div>
+
+    <script>
+        function addToCart(itemName, itemPrice) {
+            const cartItem = {
+                name: itemName,
+                price: itemPrice,
+                quantity: 1
+            };
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const existingItemIndex = cart.findIndex(item => item.name === itemName);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                cart.push(cartItem);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            displayCart();
+        }
+
+        function displayCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartContent = '';
+            cart.forEach(item => {
+                cartContent += `<p>${item.name} - $${item.price} x ${item.quantity}</p>`;
+            });
+
+            if (cartContent === '') {
+                cartContent = '<p>Your cart is empty.</p>';
+            }
+
+            document.getElementById('cart').innerHTML = cartContent;
+        }
+
+        displayCart();
+    </script>
+
+</body>
+</html>
